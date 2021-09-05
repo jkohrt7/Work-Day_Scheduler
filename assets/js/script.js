@@ -6,14 +6,15 @@
 */
 
 let DateTime = luxon.DateTime;
-let currTime;
 
 function init() {
+    
     startClock();
-    //TODO: check if the day has passed since last entry and clear if so
+    
     clearPreviousDay();
+    
     //TODO: populate calendar with events from local storage
-
+    renderCalendar();
 }
 
 /* ~~~ Date Functions ~~~ */
@@ -53,27 +54,72 @@ function ordinalLetters(n) {
     }
 }
 
-/* Calendar Functions */
-
 //Clears events if a day has passed
 function clearPreviousDay() {
-    localStorage.getItem("currDay");
-    if(currDay != DateTime.now) {
+    let currDay = localStorage.getItem("currDay");
+    if(currDay != DateTime.now().day) {
         localStorage.clear();
-        localStorage.setItem(DateTime.now());
+        localStorage.setItem("currDay", DateTime.now().day);
     }
 }
 
-//Render the calendar from 9am to 5pm
+/* Calendar Functions */
+
+//Create and render 1 event tag for every event in the eventArray
 function renderCalendar() {
-    
+    let eventsObj = getExistingEvents();
+    let hourTag;
+    let hoursInDay = 9;
+
+    for(let i = 0; i < hoursInDay; i++) {
+        console.log("i")
+        hourTag = createEventTag(i, eventsObj);
+        $(".container").append(hourTag); 
+    }
 }
 
 //pull hashmap containing time/event 
 function getExistingEvents() {
+    let eventsObj = JSON.parse(window.localStorage.getItem("events"));
+    
+    if(eventsObj === null) {
+        eventsObj = {
+            "9" : [" 9AM", ""],
+            "10": ["10AM", ""],
+            "11": ["11AM", ""],
+            "12": ["12PM", ""],
+            "13" : [" 1PM", ""],
+            "14" : [" 2PM", ""],
+            "15" : [" 3PM", ""],
+            "16" : [" 4PM", ""],
+            "17" : [" 5PM", ""]
+        };
+        localStorage.setItem("events", JSON.stringify(eventsObj));
+    }
+    return eventsObj;
+}
 
+//creates a single calendar event based on current time, existing events
+function createEventTag(i, eventsObj) {
+    let $_leftDiv   = $("<div>", {class: "time-container"}).text("" + eventsObj[Object.keys(eventsObj)[i]][0]);
+
+    //determines background color based on current time
+    let $_middleDiv = $("<textarea>");
+    if(DateTime.now().hour === parseInt(Object.keys(eventsObj)[i])) {
+        $_middleDiv.addClass("active-hour");
+    }
+    else if (DateTime.now().hour > parseInt(Object.keys(eventsObj)[i])){
+        $_middleDiv.addClass("inactive-hour")
+    }
+    else {
+        $_middleDiv.addClass("future-hour")
+    }
+
+    let $_rightDiv  = $("<div>", {class: "save-event"}).text("SAVE");
+
+    return $("<div>", {class: "event-container"}).append($_leftDiv).append($_middleDiv).append($_rightDiv);
 }
 
 /* Adding Events and stuff */
 
-init()
+init();

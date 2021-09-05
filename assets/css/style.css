@@ -75,6 +75,56 @@ textarea {
   transition: all 0.3s ease-in-out;
 }
 
+/* Calendar styles */
+.event-container {
+  display: flex;
+  
+}
+
+.time-container {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+  text-align: right;
+  width: 5em;
+}
+
+.inactive-hour {
+  background-color: lightgray;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+  flex-grow: 1;
+  
+}
+
+.active-hour {
+  background-color: red;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+  flex-grow: 1;
+  width: 50%;
+}
+
+.future-hour {
+  background-color: lime;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+  flex-grow: 1;
+  width: 50%;
+}
+
+.save-event {
+  background-color: var(--info);
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border-left: solid black 1px;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+  text-align: center;
+  width: 20%;
+}
+
+/* Time display */
 #currentDay {
   font-size:xx-large;
   padding-bottom: 0%;
