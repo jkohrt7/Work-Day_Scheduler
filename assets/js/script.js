@@ -7,19 +7,16 @@
 
 let DateTime = luxon.DateTime;
 
+//Initializes some essential portions of the app on load
 function init() {
-    
     startClock();
-    
     clearPreviousDay();
-    
-    //TODO: populate calendar with events from local storage
     renderCalendar();
 }
 
 /* ~~~ Date Functions ~~~ */
 
-//Update date each min
+//Every minute, writes the date at the top in the form [weekday], [month] #[th, st or rd]
 function startClock() {
     appendCurrentDate("#currentDay");
     setInterval(() => {
@@ -27,13 +24,13 @@ function startClock() {
     }, 60000);
 }
 
-//Appends current date to provided element
+//Given a tag, changes the inner text to the current date.
 function appendCurrentDate(id) {
     let dateString = DateTime.now().toFormat("EEEE', 'MMMM d") + ordinalLetters(parseInt(DateTime.now().toFormat("d")));
     $(id).text(dateString);
 }
 
-//Helper that appends letters to end of date numbers
+//Helper function that appends letters to end of date numbers
 function ordinalLetters(n) {
     if(n > 3 && n < 21) {
         return "th";
@@ -64,8 +61,7 @@ function clearPreviousDay() {
 }
 
 /* Calendar Functions */
-
-//Create and render 1 event tag for every event in the eventArray
+//Create and render 1 event tag (hour, content and save box) for every event in the eventArray
 function renderCalendar() {
     let eventsObj = getExistingEvents();
     let hourTag;
@@ -78,7 +74,7 @@ function renderCalendar() {
     }
 }
 
-//pull hashmap containing time/event 
+//Pull object containing time/event pairs
 function getExistingEvents() {
     let eventsObj = JSON.parse(window.localStorage.getItem("events"));
     
@@ -99,18 +95,17 @@ function getExistingEvents() {
     return eventsObj;
 }
 
+//When a save button is clicked, this function places the textArea's contents in localStorage
 function handleSaveEvent(e) {
     let eventText = e.target.parentNode.querySelector("textarea").value;
     let eventsObj = JSON.parse(localStorage.getItem("events"));
     let eventHour = "" + e.target.getAttribute("hour-data");
 
-    console.log("clicked"); 
-
     eventsObj[eventHour][1] = eventText;
     localStorage.setItem("events", JSON.stringify(eventsObj));
 }
 
-//creates a single calendar event based on current time, existing events
+//Creates a single calendar event based on current time, existing events
 function createEventTag(i, eventsObj) {
     let $_leftDiv   = $("<div>", {class: "time-container"}).text("" + eventsObj[Object.keys(eventsObj)[i]][0]);
     let keys = Object.keys(eventsObj);
@@ -132,10 +127,7 @@ function createEventTag(i, eventsObj) {
     return $("<div>", {class: "event-container"}).append($_leftDiv).append($_middleDiv).append($_rightDiv);
 }
 
-/* Listener for saving events */
-//
-
-
+// Adds onClick listeners to save buttons. Only executes after the calendar has rendered.
 $(document).ready(function(){
     let saveElementList = document.querySelectorAll(".save-event");
     for(let i = 0; i < saveElementList.length; i++) {
