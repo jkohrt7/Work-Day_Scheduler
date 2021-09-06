@@ -72,7 +72,7 @@ function renderCalendar() {
     let hoursInDay = 9;
 
     for(let i = 0; i < hoursInDay; i++) {
-        console.log("i")
+        console.log("i");
         hourTag = createEventTag(i, eventsObj);
         $(".container").append(hourTag); 
     }
@@ -99,27 +99,49 @@ function getExistingEvents() {
     return eventsObj;
 }
 
+function handleSaveEvent(e) {
+    let eventText = e.target.parentNode.querySelector("textarea").value;
+    let eventsObj = JSON.parse(localStorage.getItem("events"));
+    let eventHour = "" + e.target.getAttribute("hour-data");
+
+    console.log("clicked"); 
+
+    eventsObj[eventHour][1] = eventText;
+    localStorage.setItem("events", JSON.stringify(eventsObj));
+}
+
 //creates a single calendar event based on current time, existing events
 function createEventTag(i, eventsObj) {
     let $_leftDiv   = $("<div>", {class: "time-container"}).text("" + eventsObj[Object.keys(eventsObj)[i]][0]);
+    let keys = Object.keys(eventsObj);
 
     //determines background color based on current time
-    let $_middleDiv = $("<textarea>");
-    if(DateTime.now().hour === parseInt(Object.keys(eventsObj)[i])) {
+    let $_middleDiv = $("<textarea>").val(eventsObj[keys[i]][1]);
+    if(DateTime.now().hour === parseInt(keys[i])) {
         $_middleDiv.addClass("active-hour");
     }
-    else if (DateTime.now().hour > parseInt(Object.keys(eventsObj)[i])){
+    else if (DateTime.now().hour > parseInt(keys[i])){
         $_middleDiv.addClass("inactive-hour")
     }
     else {
         $_middleDiv.addClass("future-hour")
     }
 
-    let $_rightDiv  = $("<div>", {class: "save-event"}).text("SAVE");
+    let $_rightDiv  = $("<div>", {class: "save-event", "hour-data": Object.keys(eventsObj)[i]}).text("SAVE");
 
     return $("<div>", {class: "event-container"}).append($_leftDiv).append($_middleDiv).append($_rightDiv);
 }
 
-/* Adding Events and stuff */
+/* Listener for saving events */
+//
+
+
+$(document).ready(function(){
+    let saveElementList = document.querySelectorAll(".save-event");
+    for(let i = 0; i < saveElementList.length; i++) {
+        saveElementList[i].addEventListener("click", handleSaveEvent)
+    }
+    //$(".save-event").on("click", handleSaveEvent(e))
+});
 
 init();
