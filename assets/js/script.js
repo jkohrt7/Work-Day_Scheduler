@@ -127,7 +127,7 @@ function createEventTag(i, eventsObj) {
         $_middleDiv.addClass("future-hour")
     }
 
-    let $_rightDiv  = $("<div>", {class: "save-event", "hour-data": Object.keys(eventsObj)[i]}).text("SAVE");
+    let $_rightDiv  = $("<div>", {class: "save-event", "hour-data": Object.keys(eventsObj)[i]}).text("🖫");
 
     return $("<div>", {class: "event-container"}).append($_leftDiv).append($_middleDiv).append($_rightDiv);
 }

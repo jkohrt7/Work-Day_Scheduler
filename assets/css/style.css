@@ -93,6 +93,7 @@ textarea {
 .inactive-hour {
   background-color: lightgray;
   flex-grow: 1;
+  padding-bottom: 1px;
   resize: none;
 }
 
@@ -112,11 +113,16 @@ textarea {
 
 .save-event {
   background-color: var(--info);
+  color: white;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
   border-left: solid black 1px;
   text-align: center;
-  width: 6em;
+  width: 3em;
+
+  font-size: 200%;
+  padding-top: 5px;
+
   transition: .2s;
   cursor: pointer;
 }
