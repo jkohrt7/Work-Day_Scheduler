@@ -5,6 +5,8 @@ function init() {
     startClock();
     //clearPreviousDay();
     renderCalendar();
+    setInterval(renderCalendar, 3600000);
+    
 }
 
 /* ~~~ Date Functions ~~~ */
