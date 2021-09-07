@@ -1,16 +1,9 @@
-/* 
-    TODO: put this in submission notes and delete from code.
-    Because Moment.js is deprecated, I deviated a little and used luxon 2.0
-    to run time-related functions. This is one of the libraries the
-    Moment.js docs suggest should be used as an alternative.
-*/
-
 let DateTime = luxon.DateTime;
 
 //Initializes some essential portions of the app on load
 function init() {
     startClock();
-    clearPreviousDay();
+    //clearPreviousDay();
     renderCalendar();
 }
 
